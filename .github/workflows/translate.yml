@@ -1,0 +1,24 @@
+name: Continuous Translation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: 102yuta/OpenAI-Continuous-Translator@master
+      with:
+          git_repo_url: https://github.com/openai/openai-cookbook
+          api_key: ${{ secrets.OPENAI_API_KEY }}
+          file_types: "md,mdx"
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: .
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
